@@ -1,0 +1,56 @@
+org: ${file(./config.yml):aws.org}
+service: mmdb-test
+
+provider:
+  name: aws
+  runtime: nodejs20.x
+  region: eu-north-1
+  iam:
+    role: ${file(./config.yml):aws.role}
+
+functions:
+  ## Movies
+  GetMovies:
+    handler: functions/GetMovies/index.handler
+    events:
+      - httpApi:
+          path: /api/movies
+          method: GET
+  GetMovieById:
+    handler: functions/GetMovieById/index.handler
+    events:
+      - httpApi:
+          path: /api/movies/{id}
+          method: GET
+  PostMovie:
+    handler: functions/PostMovie/index.handler
+    events:
+      - httpApi:
+          path: /api/movies
+          method: POST
+  ## Users
+  PostUser:
+    handler: functions/PostUser/index.handler
+    events:
+      - httpApi:
+          path: /api/auth/register
+          method: POST
+  ## Reviews
+  GetMovieReviews:
+    handler: functions/GetMovieReviews/index.handler
+    events:
+      - httpApi:
+          path: /api/movies/{id}/reviews
+          method: GET
+  GetUserReviews:
+    handler: functions/GetUserReviews/index.handler
+    events:
+      - httpApi:
+          path: /api/reviews/{username}
+          method: GET
+  PostReview:
+    handler: functions/PostReview/index.handler
+    events:
+      - httpApi:
+          path: /api/reviews
+          method: POST
