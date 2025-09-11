@@ -10,12 +10,6 @@ provider:
 
 functions:
   ## Movies
-  GetMovies:
-    handler: functions/GetMovies/index.handler
-    events:
-      - httpApi:
-          path: /api/movies
-          method: GET
   GetMovieById:
     handler: functions/GetMovieById/index.handler
     events:
@@ -54,3 +48,21 @@ functions:
       - httpApi:
           path: /api/reviews
           method: POST
+
+resources:
+  Resources:
+    MMDBtable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: mmdb-table
+        AttributeDefinitions:
+          - AttributeName: pk
+            AttributeType: S
+          - AttributeName: sk
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pk
+            KeyType: HASH
+          - AttributeName: sk
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
